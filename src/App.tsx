@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import myDigitalIdLogo from './assets/mydigitalid.png'
 import './App.css'
 
 type JourneyStep = {
@@ -326,15 +327,63 @@ const notifications: NotificationItem[] = [
   },
 ]
 
+const jpnDocuments: { title: string; source: string }[] = [
+  { title: 'Borang Pengesahan Kelahiran hospital', source: 'KKM' },
+  { title: 'Kad Pranatal (Buku Rawatan Mengandung)', source: 'KKM' },
+  { title: 'Kad Pengenalan ibu & bapa', source: 'JPN / MyDigital ID' },
+  { title: 'Sijil Perkahwinan ibu bapa', source: 'JPN' },
+]
+
 function App() {
+  const [view, setView] = useState<'home' | 'modul' | 'ciri'>('home')
   const [childName, setChildName] = useState('Aisyah Damia')
   const [isNameSubmitted, setIsNameSubmitted] = useState(false)
+  const [applicant, setApplicant] = useState('Bapa')
+  const [declared, setDeclared] = useState(false)
   const [selectedSaving, setSelectedSaving] = useState('SSPN Prime')
   const [consentGiven, setConsentGiven] = useState(false)
 
   const completedSteps = journeySteps.filter((step) => step.status === 'Selesai').length
   const progressPercentage = Math.round((completedSteps / journeySteps.length) * 100)
   const trimmedChildName = childName.trim()
+
+  const fatherFullName = 'Ahmad Hakimi bin Roslan'
+  const childGender = 'Perempuan'
+  const patronymic = childGender === 'Perempuan' ? 'binti' : 'bin'
+  const fatherGivenName = fatherFullName.split(/\s+bin\s+/i)[0]
+  const fullChildName = trimmedChildName
+    ? `${trimmedChildName} ${patronymic} ${fatherGivenName}`
+    : ''
+  const canSubmit = Boolean(trimmedChildName) && declared
+
+  const openModul = () => {
+    setView('modul')
+    window.scrollTo(0, 0)
+  }
+  const openCiri = () => {
+    setView('ciri')
+    window.scrollTo(0, 0)
+  }
+  const openHome = () => {
+    setView('home')
+    window.scrollTo(0, 0)
+  }
+
+  if (view === 'modul') {
+    return (
+      <main className="app-shell">
+        <ModulPage onHome={openHome} />
+      </main>
+    )
+  }
+
+  if (view === 'ciri') {
+    return (
+      <main className="app-shell">
+        <CiriPage onHome={openHome} />
+      </main>
+    )
+  }
 
   return (
     <main className="app-shell">
@@ -346,10 +395,17 @@ function App() {
           </a>
           <div className="nav-actions">
             <a href="#tujuan">Tujuan</a>
-            <a href="#modul">Modul</a>
+            <button type="button" className="link-button" onClick={openModul}>
+              Modul
+            </button>
             <a href="#pendaftaran">Pendaftaran</a>
-            <a href="#ciri">Ciri-Ciri</a>
-            <button type="button">Log masuk MyDigital ID</button>
+            <button type="button" className="link-button" onClick={openCiri}>
+              Ciri-Ciri
+            </button>
+            <button type="button" className="login-button">
+              <img className="login-logo" src={myDigitalIdLogo} alt="" aria-hidden="true" />
+              Log Masuk MyDigital ID
+            </button>
           </div>
         </nav>
 
@@ -367,9 +423,9 @@ function App() {
               <a href="#pendaftaran" className="primary-action">
                 Lengkapkan pendaftaran
               </a>
-              <a href="#modul" className="secondary-action">
+              <button type="button" className="secondary-action" onClick={openModul}>
                 Lihat modul MyAnak
-              </a>
+              </button>
             </div>
           </div>
 
@@ -450,28 +506,19 @@ function App() {
         </div>
       </section>
 
-      <section className="modules-section" id="modul">
-        <div className="section-heading centered">
+      <section className="modules-cta">
+        <div>
           <p className="eyebrow">Modul-Modul</p>
           <h2>Tujuh modul, satu pengalaman bersepadu</h2>
           <p>
-            Setiap modul menggunakan prinsip once-only: data yang sudah disahkan
-            tidak diminta semula daripada ibu bapa.
+            Lihat ketujuh-tujuh modul MyAnak &mdash; daripada prapendaftaran
+            kelahiran hingga notifikasi perkhidmatan anak &mdash; dalam halaman
+            khusus.
           </p>
         </div>
-
-        <div className="modules-grid">
-          {modules.map((module) => (
-            <article className="module-card" key={module.code}>
-              <div className="module-top">
-                <span className="module-code">{module.code}</span>
-                <span className="module-agency">{module.agency}</span>
-              </div>
-              <h3>{module.title}</h3>
-              <p>{module.description}</p>
-            </article>
-          ))}
-        </div>
+        <button type="button" className="primary-action" onClick={openModul}>
+          Lihat 7 modul MyAnak
+        </button>
       </section>
 
       <section className="section-grid" id="pendaftaran">
@@ -480,13 +527,78 @@ function App() {
             <p className="eyebrow">Modul 02 &middot; Tindakan Ibu Bapa</p>
             <h2>Pendaftaran nama anak</h2>
             <p>
-              Maklumat ibu bapa dan data kelahiran telah diisi automatik. Masukkan
-              nama anak untuk semakan JPN.
+              Rekod kelahiran daripada hospital dan maklumat ibu bapa telah diisi
+              automatik. Lengkapkan nama anak dan pengakuan untuk semakan JPN di
+              bawah Akta Pendaftaran Kelahiran dan Kematian 1957.
             </p>
           </div>
 
+          <div className="form-meta" aria-label="Maklumat borang JPN">
+            <div className="form-meta-item">
+              <span>Borang</span>
+              <strong>JPN.LM01 (Digital)</strong>
+            </div>
+            <div className="form-meta-item">
+              <span>Tempoh pendaftaran</span>
+              <strong>60 hari &middot; akhir 24 Julai 2026</strong>
+            </div>
+            <div className="form-meta-item">
+              <span>Bayaran</span>
+              <strong>Tanpa bayaran (percuma)</strong>
+            </div>
+          </div>
+
+          <div className="deadline-strip">
+            <span className="deadline-dot" />
+            <p>
+              Baki <strong>58 hari</strong> untuk mendaftar kelahiran dalam tempoh
+              wajib 60 hari di bawah undang-undang.
+            </p>
+          </div>
+
+          <div className="birth-record" aria-label="Rekod kelahiran daripada hospital">
+            <div className="birth-record-head">
+              <span className="record-source">Rekod hospital &middot; KKM</span>
+              <span className="status-pill success">Disahkan</span>
+            </div>
+            <div className="autofill-grid">
+              <div>
+                <span>Tarikh &amp; masa lahir</span>
+                <strong>25 Mei 2026, 8:42 pagi</strong>
+              </div>
+              <div>
+                <span>Jantina</span>
+                <strong>{childGender}</strong>
+              </div>
+              <div>
+                <span>Berat lahir</span>
+                <strong>3.10 kg</strong>
+              </div>
+              <div>
+                <span>Tempat lahir</span>
+                <strong>Hospital Putrajaya</strong>
+              </div>
+              <div>
+                <span>Ibu</span>
+                <strong>Nur Farah binti Azman</strong>
+              </div>
+              <div>
+                <span>Bapa</span>
+                <strong>{fatherFullName}</strong>
+              </div>
+              <div>
+                <span>No. rekod hospital</span>
+                <strong>HPJ-2026-058841</strong>
+              </div>
+              <div>
+                <span>MyKid sementara</span>
+                <strong>260525-14-0001</strong>
+              </div>
+            </div>
+          </div>
+
           <label className="field">
-            <span>Nama anak</span>
+            <span>Nama penuh anak (seperti dikehendaki dalam Sijil Kelahiran)</span>
             <input
               value={childName}
               onChange={(event) => {
@@ -497,47 +609,115 @@ function App() {
             />
           </label>
 
-          <div className="autofill-grid" aria-label="Maklumat diisi automatik">
-            <div>
-              <span>Ibu</span>
-              <strong>Nur Farah binti Azman</strong>
-            </div>
-            <div>
-              <span>Bapa</span>
-              <strong>Ahmad Hakimi bin Roslan</strong>
-            </div>
-            <div>
-              <span>Lokasi lahir</span>
-              <strong>Hospital Putrajaya</strong>
-            </div>
-            <div>
-              <span>MyKid sementara</span>
-              <strong>260525-14-0001</strong>
+          <div className="name-preview">
+            <span>Nama penuh untuk Sijil Kelahiran</span>
+            <strong>{fullChildName || 'Sila masukkan nama anak'}</strong>
+          </div>
+
+          <div className="form-row">
+            <label className="field compact">
+              <span>Pemohon (hubungan dengan anak)</span>
+              <select
+                value={applicant}
+                onChange={(event) => {
+                  setApplicant(event.target.value)
+                  setIsNameSubmitted(false)
+                }}
+              >
+                <option value="Bapa">Bapa</option>
+                <option value="Ibu">Ibu</option>
+                <option value="Penjaga sah">Penjaga sah</option>
+                <option value="Pemaklum (saksi kelahiran)">Pemaklum (saksi kelahiran)</option>
+              </select>
+            </label>
+            <div className="field compact static-field">
+              <span>Bin / Binti (auto)</span>
+              <strong>
+                {patronymic} {fatherGivenName}
+              </strong>
             </div>
           </div>
 
-          <div className="approval-strip">
-            <span className="status-dot" />
-            <p>
-              Nama <strong>{trimmedChildName || 'belum diisi'}</strong> akan disemak oleh
-              enjin peraturan JPN sebelum e-Sijil Kelahiran dijana.
+          <ul className="rule-hints">
+            <li>Guna ejaan Rumi penuh tanpa gelaran, pangkat atau nombor.</li>
+            <li>Nama tidak boleh mengandungi unsur tidak senonoh atau menyentuh sensitiviti.</li>
+            <li>Ejaan disemak automatik oleh enjin peraturan penamaan JPN.</li>
+          </ul>
+
+          <div className="doc-checklist" aria-label="Dokumen JPN.LM01 disahkan secara digital">
+            <div className="doc-checklist-head">
+              <h3>Dokumen JPN.LM01</h3>
+              <span className="status-pill success">Disahkan secara digital</span>
+            </div>
+            <p className="doc-checklist-note">
+              Dokumen wajib disahkan automatik rentas agensi &mdash; tiada salinan
+              fizikal perlu dimuat naik.
             </p>
+            <ul>
+              {jpnDocuments.map((document) => (
+                <li key={document.title}>
+                  <span className="doc-check" aria-hidden="true">
+                    &#10003;
+                  </span>
+                  <span className="doc-title">{document.title}</span>
+                  <span className="doc-source">{document.source}</span>
+                </li>
+              ))}
+            </ul>
           </div>
+
+          <label className="declaration">
+            <input
+              type="checkbox"
+              checked={declared}
+              onChange={(event) => {
+                setDeclared(event.target.checked)
+                setIsNameSubmitted(false)
+              }}
+            />
+            <span>
+              Saya, sebagai <strong>{applicant.toLowerCase()}</strong>, mengesahkan
+              maklumat di atas adalah benar dan bersetuju nama ini didaftarkan di
+              bawah Akta Pendaftaran Kelahiran dan Kematian 1957.
+            </span>
+          </label>
 
           <div className="registration-actions">
             <button
               type="button"
               className="submit-registration"
-              disabled={!trimmedChildName}
+              disabled={!canSubmit}
               onClick={() => setIsNameSubmitted(true)}
             >
               Hantar untuk Semakan JPN
             </button>
-            <p className={isNameSubmitted ? 'submission-status success' : 'submission-status'}>
-              {isNameSubmitted
-                ? `Permohonan nama ${trimmedChildName} telah dihantar untuk semakan JPN.`
-                : 'Pastikan ejaan nama anak betul sebelum dihantar.'}
-            </p>
+            {isNameSubmitted ? (
+              <div className="submission-receipt">
+                <strong>Permohonan diterima &amp; sedang disemak JPN</strong>
+                <dl>
+                  <div>
+                    <dt>No. rujukan</dt>
+                    <dd>JPN-LHR-2026-0525-8841</dd>
+                  </div>
+                  <div>
+                    <dt>Nama didaftar</dt>
+                    <dd>{fullChildName}</dd>
+                  </div>
+                  <div>
+                    <dt>Status</dt>
+                    <dd>Dalam semakan &middot; anggaran 1 hari bekerja</dd>
+                  </div>
+                </dl>
+                <p>
+                  e-Sijil Kelahiran dan Nombor MyKid akan dijana automatik sebaik
+                  nama diluluskan, dan dihantar ke peti dokumen digital anda.
+                </p>
+              </div>
+            ) : (
+              <p className="submission-status">
+                Lengkapkan nama anak dan tandakan pengakuan sebelum menghantar.
+              </p>
+            )}
           </div>
         </div>
 
@@ -776,44 +956,13 @@ function App() {
           </div>
           {immunisations.map((item) => (
             <div className="table-row" role="row" key={`${item.age}-${item.vaccine}`}>
-              <span>{item.age}</span>
-              <span>{item.vaccine}</span>
-              <span>{item.dueDate}</span>
-              <span className={`status-pill ${statusClassMap[item.status]}`}>
+              <span data-label="Umur">{item.age}</span>
+              <span data-label="Vaksin">{item.vaccine}</span>
+              <span data-label="Tarikh cadangan">{item.dueDate}</span>
+              <span className={`status-pill ${statusClassMap[item.status]}`} data-label="Status">
                 {item.status}
               </span>
             </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="features-section" id="ciri">
-        <div className="section-heading centered">
-          <p className="eyebrow">Ciri-Ciri Utama</p>
-          <h2>Apa yang menggerakkan MyAnak</h2>
-          <p>
-            Enam ciri teras yang memastikan pengalaman pendaftaran kelahiran
-            selamat, automatik dan boleh berkembang sepanjang hidup anak.
-          </p>
-        </div>
-
-        <div className="features-grid">
-          {features.map((feature, index) => (
-            <article className="feature-card" key={feature}>
-              <span className="feature-index">{String(index + 1).padStart(2, '0')}</span>
-              <p>{feature}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="strategic-section" aria-label="Nilai strategik">
-        <p className="eyebrow">Nilai Strategik</p>
-        <div className="strategic-strip">
-          {strategicValues.map((value) => (
-            <span className="strategic-pill" key={value}>
-              {value}
-            </span>
           ))}
         </div>
       </section>
@@ -831,6 +980,124 @@ function App() {
         <button type="button">Aktifkan peringatan masa depan</button>
       </section>
     </main>
+  )
+}
+
+function ModulPage({ onHome }: { onHome: () => void }) {
+  return (
+    <>
+      <section className="hero-section modul-hero">
+        <nav className="topbar" aria-label="Navigasi utama">
+          <button
+            type="button"
+            className="brand link-button"
+            onClick={onHome}
+            aria-label="MyAnak halaman utama"
+          >
+            <span className="brand-mark">MA</span>
+            <span>MyAnak</span>
+          </button>
+          <div className="nav-actions">
+            <button type="button" onClick={onHome}>
+              &larr; Kembali ke Utama
+            </button>
+          </div>
+        </nav>
+
+        <div className="modul-hero-copy">
+          <p className="eyebrow">Modul-Modul</p>
+          <h1>Tujuh modul, satu pengalaman bersepadu</h1>
+          <p className="hero-description">
+            Setiap modul menggunakan prinsip once-only: data yang sudah disahkan
+            tidak diminta semula daripada ibu bapa. MyAnak menyelaras kesemuanya
+            melalui satu portal.
+          </p>
+        </div>
+      </section>
+
+      <section className="modules-section" id="modul">
+        <div className="modules-grid">
+          {modules.map((module) => (
+            <article className="module-card" key={module.code}>
+              <div className="module-top">
+                <span className="module-code">{module.code}</span>
+                <span className="module-agency">{module.agency}</span>
+              </div>
+              <h3>{module.title}</h3>
+              <p>{module.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="strategic-section" aria-label="Nilai strategik">
+        <p className="eyebrow">Nilai Strategik</p>
+        <div className="strategic-strip">
+          {strategicValues.map((value) => (
+            <span className="strategic-pill" key={value}>
+              {value}
+            </span>
+          ))}
+        </div>
+
+        <div className="modul-back">
+          <button type="button" className="primary-action" onClick={onHome}>
+            &larr; Kembali ke halaman utama
+          </button>
+        </div>
+      </section>
+    </>
+  )
+}
+
+function CiriPage({ onHome }: { onHome: () => void }) {
+  return (
+    <>
+      <section className="hero-section modul-hero">
+        <nav className="topbar" aria-label="Navigasi utama">
+          <button
+            type="button"
+            className="brand link-button"
+            onClick={onHome}
+            aria-label="MyAnak halaman utama"
+          >
+            <span className="brand-mark">MA</span>
+            <span>MyAnak</span>
+          </button>
+          <div className="nav-actions">
+            <button type="button" onClick={onHome}>
+              &larr; Kembali ke Utama
+            </button>
+          </div>
+        </nav>
+
+        <div className="modul-hero-copy">
+          <p className="eyebrow">Ciri-Ciri Utama</p>
+          <h1>Apa yang menggerakkan MyAnak</h1>
+          <p className="hero-description">
+            Enam ciri teras yang memastikan pengalaman pendaftaran kelahiran
+            selamat, automatik dan boleh berkembang sepanjang hidup anak.
+          </p>
+        </div>
+      </section>
+
+      <section className="features-section" id="ciri">
+        <div className="features-grid">
+          {features.map((feature, index) => (
+            <article className="feature-card" key={feature}>
+              <span className="feature-index">{String(index + 1).padStart(2, '0')}</span>
+              <p>{feature}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="modul-back">
+          <button type="button" className="primary-action" onClick={onHome}>
+            &larr; Kembali ke halaman utama
+          </button>
+        </div>
+      </section>
+    </>
   )
 }
 
