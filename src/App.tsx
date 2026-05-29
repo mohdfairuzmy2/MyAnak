@@ -49,6 +49,100 @@ type NotificationItem = {
   tone: 'success' | 'warning' | 'action' | 'neutral'
 }
 
+type ModuleItem = {
+  code: string
+  title: string
+  agency: string
+  description: string
+}
+
+const objektif: string[] = [
+  'Memudahkan ibu bapa melengkapkan urusan kelahiran anak melalui satu saluran digital yang selamat, mudah dan bersepadu.',
+  'Mengurangkan pengisian maklumat berulang melalui prinsip once-only dan integrasi data rentas agensi.',
+  'Mempercepat penyampaian perkhidmatan kerajaan berkaitan kelahiran, kesihatan, bantuan dan perancangan awal anak.',
+]
+
+const manfaat: { audience: string; tagline: string; detail: string }[] = [
+  {
+    audience: 'Kepada Rakyat',
+    tagline: 'Urusan lebih cepat & tersusun',
+    detail:
+      'Ibu bapa dapat menyelesaikan urusan kelahiran anak dengan lebih cepat dan tersusun tanpa perlu hadir berulang kali ke kaunter atau mengisi maklumat yang sama di pelbagai agensi.',
+  },
+  {
+    audience: 'Kepada Kerajaan',
+    tagline: 'Penyampaian lebih cekap & proaktif',
+    detail:
+      'Meningkatkan kecekapan penyampaian perkhidmatan, memperkukuh integrasi data rentas agensi dan membolehkan kerajaan menyediakan perkhidmatan yang lebih proaktif sepanjang kitaran hidup rakyat.',
+  },
+]
+
+const modules: ModuleItem[] = [
+  {
+    code: '01',
+    title: 'Prapendaftaran & Pengesahan Kelahiran',
+    agency: 'KKM',
+    description:
+      'Rekod kelahiran diterima terus daripada sistem hospital dan dipadankan dengan profil ibu bapa.',
+  },
+  {
+    code: '02',
+    title: 'Pendaftaran Nama & Sijil Kelahiran Digital',
+    agency: 'JPN',
+    description:
+      'Semakan nama automatik dan penjanaan e-Sijil Kelahiran terus ke peti dokumen digital.',
+  },
+  {
+    code: '03',
+    title: 'Penjanaan MyKid',
+    agency: 'JPN',
+    description: 'Nombor MyKid dijana automatik sebaik sahaja nama anak diluluskan oleh JPN.',
+  },
+  {
+    code: '04',
+    title: 'Semakan Kelayakan Bantuan Kelahiran',
+    agency: 'LHDN / PADU',
+    description:
+      'Kelayakan bantuan dinilai automatik menggunakan data pendapatan isi rumah yang telah disahkan.',
+  },
+  {
+    code: '05',
+    title: 'Pembukaan Akaun Simpanan Anak',
+    agency: 'PTPTN / KWSP',
+    description:
+      'Pilihan membuka akaun SSPN Prime atau caruman simpanan masa depan dengan persetujuan ibu bapa.',
+  },
+  {
+    code: '06',
+    title: 'Rekod Imunisasi & Janji Temu Kesihatan',
+    agency: 'KKM',
+    description: 'Jadual vaksin dijana automatik berdasarkan tarikh lahir dan klinik pilihan.',
+  },
+  {
+    code: '07',
+    title: 'Notifikasi Perkhidmatan Anak',
+    agency: 'MyGov',
+    description:
+      'Peringatan proaktif merentas Push, SMS dan WhatsApp sepanjang kitaran hidup anak.',
+  },
+]
+
+const features: string[] = [
+  'Log masuk selamat melalui identiti digital',
+  'Auto-populate maklumat ibu bapa',
+  'Integrasi dengan JPN, KKM, LHDN, PADU, PTPTN dan KWSP',
+  'Notifikasi proaktif kepada ibu bapa',
+  'Semakan kelayakan bantuan secara automatik',
+  'Rekod digital anak yang boleh dikembangkan untuk fasa persekolahan dan perkhidmatan masa depan',
+]
+
+const strategicValues: string[] = [
+  'Berimpak kepada rakyat',
+  'Integrasi rentas agensi',
+  'Berpandukan data',
+  'Proaktif & selamat',
+]
+
 const journeySteps: JourneyStep[] = [
   {
     agency: 'KKM',
@@ -251,30 +345,30 @@ function App() {
             <span>MyAnak</span>
           </a>
           <div className="nav-actions">
-            <a href="#cerita">Cerita Sistem</a>
-            <a href="#journey">Journey</a>
-            <a href="#dokumen">Dokumen</a>
-            <a href="#imunisasi">Imunisasi</a>
+            <a href="#tujuan">Tujuan</a>
+            <a href="#modul">Modul</a>
+            <a href="#pendaftaran">Pendaftaran</a>
+            <a href="#ciri">Ciri-Ciri</a>
             <button type="button">Log masuk MyDigital ID</button>
           </div>
         </nav>
 
         <div className="hero-grid" id="overview">
           <div className="hero-copy">
-            <p className="eyebrow">Portal Pendaftaran & Pengurusan Kelahiran Anak Setempat</p>
+            <p className="eyebrow">Inisiatif 1 &middot; Portal Pendaftaran & Pengurusan Kelahiran Anak Setempat</p>
             <h1>Daftar kelahiran anak sekali, gerakkan semua perkhidmatan kerajaan.</h1>
             <p className="hero-description">
-              MyAnak menyatukan KKM, JPN, LHDN, PADU, PTPTN dan KWSP dalam satu
-              journey digital. Ibu bapa hanya melengkapkan nama anak, selebihnya
-              disahkan melalui API kerajaan yang selamat.
+              Satu saluran digital bersepadu untuk urusan kelahiran anak secara
+              mudah, selamat dan proaktif &mdash; menyatukan KKM, JPN, LHDN, PADU,
+              PTPTN dan KWSP dalam satu journey melalui ekosistem MyGov.
             </p>
 
             <div className="hero-actions">
               <a href="#pendaftaran" className="primary-action">
                 Lengkapkan pendaftaran
               </a>
-              <a href="#integrasi" className="secondary-action">
-                Lihat integrasi agensi
+              <a href="#modul" className="secondary-action">
+                Lihat modul MyAnak
               </a>
             </div>
           </div>
@@ -299,9 +393,9 @@ function App() {
         </div>
       </section>
 
-      <section className="story-section" id="cerita">
+      <section className="story-section" id="tujuan">
         <div className="section-heading centered">
-          <p className="eyebrow">Cerita Sistem</p>
+          <p className="eyebrow">Tujuan & Objektif</p>
           <h2>Kenapa MyAnak perlu wujud?</h2>
           <p>
             MyAnak direka untuk mengubah pengalaman ibu bapa daripada proses
@@ -312,51 +406,78 @@ function App() {
 
         <div className="story-grid">
           <article className="story-card story-highlight">
-            <span>Objektif Sistem</span>
-            <h3>Mengurangkan beban ibu bapa selepas kelahiran anak</h3>
+            <span>Tujuan</span>
+            <h3>Satu platform digital setempat untuk urusan kelahiran</h3>
             <p>
-              Sistem ini memastikan ibu bapa tidak perlu mengisi maklumat yang sama
-              berkali-kali. Rekod kelahiran, identiti ibu bapa, bantuan, simpanan
-              dan imunisasi diurus melalui satu portal.
+              Membangunkan satu platform digital setempat bagi menyelaras proses
+              pendaftaran kelahiran, pengesahan rekod kesihatan bayi, pendaftaran
+              nama, penjanaan MyKid, semakan bantuan berkaitan kelahiran serta
+              perancangan perkhidmatan anak secara bersepadu melalui ekosistem MyGov.
             </p>
           </article>
 
           <article className="story-card">
-            <span>Siapa Terlibat</span>
-            <ul>
-              <li>Ibu bapa atau penjaga sah bayi.</li>
-              <li>Hospital dan klinik KKM/swasta yang mengesahkan kelahiran.</li>
-              <li>JPN untuk pendaftaran kelahiran, e-Sijil dan MyKid.</li>
-              <li>LHDN/PADU untuk semakan kelayakan bantuan bersasar.</li>
-              <li>PTPTN/KWSP untuk pilihan simpanan masa depan anak.</li>
-            </ul>
+            <span>Objektif</span>
+            <ol className="numbered-list">
+              {objektif.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ol>
           </article>
+        </div>
+      </section>
 
-          <article className="story-card">
-            <span>Data Yang Digunakan</span>
-            <ul>
-              <li>Data kelahiran: tarikh, masa, tempat lahir dan rekod hospital.</li>
-              <li>Data ibu bapa: identiti, hubungan keluarga dan alamat.</li>
-              <li>Data kelayakan: julat pendapatan dan status tanggungan.</li>
-              <li>Data perkhidmatan: akaun bank, pilihan simpanan dan klinik pilihan.</li>
-            </ul>
-          </article>
+      <section className="benefit-section" id="manfaat">
+        <div className="section-heading centered">
+          <p className="eyebrow">Manfaat</p>
+          <h2>Impak kepada rakyat dan kerajaan</h2>
+          <p>
+            MyAnak memberi nilai dua hala &mdash; memudahkan urusan ibu bapa dan
+            meningkatkan kecekapan penyampaian perkhidmatan kerajaan.
+          </p>
+        </div>
 
-          <article className="story-card">
-            <span>Tujuan Sistem</span>
-            <p>
-              MyAnak bertindak sebagai orkestrator rentas agensi. Ia bukan mengganti
-              sistem JPN, KKM atau agensi lain, tetapi menghubungkan status, consent,
-              dokumen dan tindakan seterusnya dalam satu pengalaman digital.
-            </p>
-          </article>
+        <div className="benefit-cards">
+          {manfaat.map((item) => (
+            <article className="manfaat-card" key={item.audience}>
+              <div className="manfaat-head">
+                <span className="manfaat-audience">{item.audience}</span>
+                <strong>{item.tagline}</strong>
+              </div>
+              <p>{item.detail}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="modules-section" id="modul">
+        <div className="section-heading centered">
+          <p className="eyebrow">Modul-Modul</p>
+          <h2>Tujuh modul, satu pengalaman bersepadu</h2>
+          <p>
+            Setiap modul menggunakan prinsip once-only: data yang sudah disahkan
+            tidak diminta semula daripada ibu bapa.
+          </p>
+        </div>
+
+        <div className="modules-grid">
+          {modules.map((module) => (
+            <article className="module-card" key={module.code}>
+              <div className="module-top">
+                <span className="module-code">{module.code}</span>
+                <span className="module-agency">{module.agency}</span>
+              </div>
+              <h3>{module.title}</h3>
+              <p>{module.description}</p>
+            </article>
+          ))}
         </div>
       </section>
 
       <section className="section-grid" id="pendaftaran">
         <div className="panel registration-panel">
           <div className="section-heading">
-            <p className="eyebrow">Tindakan Ibu Bapa</p>
+            <p className="eyebrow">Modul 02 &middot; Tindakan Ibu Bapa</p>
             <h2>Pendaftaran nama anak</h2>
             <p>
               Maklumat ibu bapa dan data kelahiran telah diisi automatik. Masukkan
@@ -422,7 +543,7 @@ function App() {
 
         <div className="panel benefit-panel">
           <div className="section-heading">
-            <p className="eyebrow">Bantuan Proaktif</p>
+            <p className="eyebrow">Modul 04 &middot; Bantuan Proaktif</p>
             <h2>Kelayakan insentif kelahiran</h2>
           </div>
           <div className="benefit-amount">
@@ -468,7 +589,7 @@ function App() {
 
       <section className="insight-section" id="dokumen">
         <div className="section-heading centered">
-          <p className="eyebrow">Maklumat Tambahan</p>
+          <p className="eyebrow">Modul 02 & 03 &middot; Dokumen Digital</p>
           <h2>Dokumen dan timeline permohonan</h2>
           <p>
             Ibu bapa boleh melihat dokumen yang telah dijana, status semakan, dan
@@ -544,7 +665,7 @@ function App() {
 
         <div className="panel savings-panel">
           <div className="section-heading">
-            <p className="eyebrow">Simpanan Masa Depan</p>
+            <p className="eyebrow">Modul 05 &middot; Simpanan Masa Depan</p>
             <h2>Pilih akaun untuk anak</h2>
           </div>
 
@@ -617,7 +738,7 @@ function App() {
 
         <div className="panel notification-panel">
           <div className="section-heading">
-            <p className="eyebrow">Pusat Notifikasi</p>
+            <p className="eyebrow">Modul 07 &middot; Pusat Notifikasi</p>
             <h2>Peringatan proaktif</h2>
           </div>
 
@@ -638,7 +759,7 @@ function App() {
 
       <section className="immunisation-section" id="imunisasi">
         <div className="section-heading">
-          <p className="eyebrow">Kesihatan Anak</p>
+          <p className="eyebrow">Modul 06 &middot; Kesihatan Anak</p>
           <h2>Jadual imunisasi digital</h2>
           <p>
             Tarikh vaksin dijana daripada tarikh lahir dan boleh ditempah di klinik
@@ -662,6 +783,37 @@ function App() {
                 {item.status}
               </span>
             </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="features-section" id="ciri">
+        <div className="section-heading centered">
+          <p className="eyebrow">Ciri-Ciri Utama</p>
+          <h2>Apa yang menggerakkan MyAnak</h2>
+          <p>
+            Enam ciri teras yang memastikan pengalaman pendaftaran kelahiran
+            selamat, automatik dan boleh berkembang sepanjang hidup anak.
+          </p>
+        </div>
+
+        <div className="features-grid">
+          {features.map((feature, index) => (
+            <article className="feature-card" key={feature}>
+              <span className="feature-index">{String(index + 1).padStart(2, '0')}</span>
+              <p>{feature}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="strategic-section" aria-label="Nilai strategik">
+        <p className="eyebrow">Nilai Strategik</p>
+        <div className="strategic-strip">
+          {strategicValues.map((value) => (
+            <span className="strategic-pill" key={value}>
+              {value}
+            </span>
           ))}
         </div>
       </section>

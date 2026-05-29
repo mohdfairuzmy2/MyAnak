@@ -20,6 +20,10 @@
 .journey-section,
 .insight-section,
 .immunisation-section,
+.benefit-section,
+.modules-section,
+.features-section,
+.strategic-section,
 .future-section {
   margin: 0 auto;
   max-width: 1180px;
@@ -852,6 +856,218 @@ button,
   padding: 14px 20px;
 }
 
+.numbered-list {
+  counter-reset: objektif;
+  display: grid;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.numbered-list li {
+  color: #5b6475;
+  line-height: 1.6;
+  padding-left: 46px;
+  position: relative;
+}
+
+.numbered-list li::before {
+  background: linear-gradient(135deg, #7c3aed, #00a6fb);
+  border-radius: 12px;
+  color: #ffffff;
+  content: counter(objektif);
+  counter-increment: objektif;
+  display: grid;
+  font-size: 14px;
+  font-weight: 900;
+  height: 30px;
+  left: 0;
+  place-items: center;
+  position: absolute;
+  top: 1px;
+  width: 30px;
+}
+
+.benefit-section,
+.modules-section,
+.features-section {
+  padding: 84px clamp(20px, 4vw, 32px) 0;
+}
+
+.benefit-cards {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.manfaat-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 28px;
+  box-shadow: 0 18px 50px rgba(77, 70, 180, 0.12);
+  padding: clamp(24px, 3vw, 32px);
+}
+
+.manfaat-card:nth-child(2) {
+  background:
+    radial-gradient(circle at top right, rgba(255, 241, 118, 0.4), transparent 15rem),
+    linear-gradient(135deg, #ffffff, #f5f3ff);
+}
+
+.manfaat-head {
+  border-bottom: 1px solid #ede9fe;
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+}
+
+.manfaat-audience {
+  color: #7c3aed;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.manfaat-head strong {
+  color: #172554;
+  font-size: clamp(20px, 2.6vw, 26px);
+  letter-spacing: -0.02em;
+}
+
+.manfaat-card p {
+  color: #5b6475;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.modules-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.module-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 24px;
+  box-shadow: 0 18px 50px rgba(77, 70, 180, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.module-card:hover {
+  box-shadow: 0 24px 60px rgba(77, 70, 180, 0.2);
+  transform: translateY(-4px);
+}
+
+.module-top {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.module-code {
+  background: linear-gradient(135deg, #fff176, #67e8f9);
+  border-radius: 14px;
+  color: #4c1d95;
+  display: grid;
+  font-size: 14px;
+  font-weight: 900;
+  height: 40px;
+  place-items: center;
+  width: 40px;
+}
+
+.module-agency {
+  background: #f3e8ff;
+  border-radius: 999px;
+  color: #7e22ce;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 12px;
+}
+
+.module-card h3 {
+  color: #172554;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 4px 0 0;
+}
+
+.module-card p {
+  color: #5b6475;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.features-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.feature-card {
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 24px;
+  box-shadow: 0 18px 50px rgba(77, 70, 180, 0.12);
+  display: grid;
+  gap: 16px;
+  grid-template-columns: auto 1fr;
+  padding: 22px;
+}
+
+.feature-index {
+  background: linear-gradient(135deg, #ff6b8a, #7c3aed);
+  border-radius: 14px;
+  box-shadow: 0 12px 26px rgba(124, 58, 237, 0.2);
+  color: #ffffff;
+  display: grid;
+  font-size: 14px;
+  font-weight: 900;
+  height: 40px;
+  place-items: center;
+  width: 40px;
+}
+
+.feature-card p {
+  align-self: center;
+  color: #334155;
+  font-weight: 600;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.strategic-section {
+  padding: 64px clamp(20px, 4vw, 32px) 0;
+  text-align: center;
+}
+
+.strategic-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.strategic-pill {
+  background: linear-gradient(135deg, #7c3aed, #00a6fb);
+  border-radius: 999px;
+  box-shadow: 0 14px 30px rgba(124, 58, 237, 0.22);
+  color: #ffffff;
+  font-weight: 800;
+  padding: 14px 22px;
+}
+
 @media (max-width: 900px) {
   .topbar,
   .nav-actions,
@@ -870,8 +1086,14 @@ button,
   .hero-grid,
   .story-grid,
   .insight-grid,
-  .section-grid {
+  .section-grid,
+  .benefit-cards {
     grid-template-columns: 1fr;
+  }
+
+  .modules-grid,
+  .features-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .nav-actions {
@@ -906,6 +1128,11 @@ button,
   }
 
   .document-card {
+    grid-template-columns: 1fr;
+  }
+
+  .modules-grid,
+  .features-grid {
     grid-template-columns: 1fr;
   }
 }
