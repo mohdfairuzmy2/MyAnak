@@ -590,10 +590,6 @@ function App() {
                 <span>No. rekod hospital</span>
                 <strong>HPJ-2026-058841</strong>
               </div>
-              <div>
-                <span>MyKid sementara</span>
-                <strong>260525-14-0001</strong>
-              </div>
             </div>
           </div>
 
@@ -825,24 +821,6 @@ function App() {
       </section>
 
       <section className="section-grid" id="integrasi">
-        <div className="panel integration-panel">
-          <div className="section-heading">
-            <p className="eyebrow">Lapisan Integrasi</p>
-            <h2>Agensi terhubung melalui gerbang API selamat</h2>
-            <p>
-              MyAnak bertindak sebagai orkestrator. Setiap agensi mengekalkan
-              sistem sumber masing-masing, manakala portal menyelaras consent,
-              audit trail dan status permohonan.
-            </p>
-          </div>
-
-          <div className="agency-cloud">
-            {agencies.map((agency) => (
-              <span key={agency}>{agency}</span>
-            ))}
-          </div>
-        </div>
-
         <div className="panel savings-panel">
           <div className="section-heading">
             <p className="eyebrow">Modul 05 &middot; Simpanan Masa Depan</p>
@@ -878,41 +856,6 @@ function App() {
             {consentGiven
               ? `Permohonan ${selectedSaving} sedia dihantar selepas e-Sijil diluluskan.`
               : 'Tandakan persetujuan untuk aktifkan pembukaan akaun automatik.'}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-grid operations-section">
-        <div className="panel privacy-panel">
-          <div className="section-heading">
-            <p className="eyebrow">Consent & Privasi</p>
-            <h2>Kawalan perkongsian data</h2>
-            <p>
-              Setiap akses agensi direkodkan supaya ibu bapa tahu data apa yang
-              dikongsi, untuk tujuan apa, dan bila ia digunakan.
-            </p>
-          </div>
-
-          <div className="consent-records">
-            {consentRecords.map((record) => (
-              <article className="consent-record" key={record.agency}>
-                <div className="card-header">
-                  <span>{record.agency}</span>
-                  <span className={`status-pill ${record.tone}`}>{record.status}</span>
-                </div>
-                <h4>{record.purpose}</h4>
-                <dl>
-                  <div>
-                    <dt>Data</dt>
-                    <dd>{record.dataShared}</dd>
-                  </div>
-                  <div>
-                    <dt>Akses terakhir</dt>
-                    <dd>{record.lastAccess}</dd>
-                  </div>
-                </dl>
-              </article>
-            ))}
           </div>
         </div>
 
@@ -1090,12 +1033,72 @@ function CiriPage({ onHome }: { onHome: () => void }) {
             </article>
           ))}
         </div>
+      </section>
 
-        <div className="modul-back">
-          <button type="button" className="primary-action" onClick={onHome}>
-            &larr; Kembali ke halaman utama
-          </button>
+      <section className="section-grid balanced-grid" aria-label="Integrasi dan privasi">
+        <div className="panel integration-panel">
+          <div className="section-heading">
+            <p className="eyebrow">Lapisan Integrasi</p>
+            <h2>Agensi terhubung melalui gerbang API selamat</h2>
+            <p>
+              MyAnak bertindak sebagai orkestrator. Setiap agensi mengekalkan
+              sistem sumber masing-masing, manakala portal menyelaras consent,
+              audit trail dan status permohonan.
+            </p>
+          </div>
+
+          <div className="agency-cloud">
+            {agencies.map((agency) => (
+              <span key={agency}>{agency}</span>
+            ))}
+          </div>
+
+          <ul className="integration-points">
+            <li>Setiap agensi kekal sebagai sistem sumber rasmi masing-masing.</li>
+            <li>Prinsip once-only &mdash; data disahkan sekali, diguna semula.</li>
+            <li>Setiap akses direkod dalam audit trail yang telus.</li>
+            <li>Pertukaran data melalui gerbang API berenkripsi dan selamat.</li>
+          </ul>
         </div>
+
+        <div className="panel privacy-panel">
+          <div className="section-heading">
+            <p className="eyebrow">Consent & Privasi</p>
+            <h2>Kawalan perkongsian data</h2>
+            <p>
+              Setiap akses agensi direkodkan supaya ibu bapa tahu data apa yang
+              dikongsi, untuk tujuan apa, dan bila ia digunakan.
+            </p>
+          </div>
+
+          <div className="consent-records">
+            {consentRecords.map((record) => (
+              <article className="consent-record" key={record.agency}>
+                <div className="card-header">
+                  <span>{record.agency}</span>
+                  <span className={`status-pill ${record.tone}`}>{record.status}</span>
+                </div>
+                <h4>{record.purpose}</h4>
+                <dl>
+                  <div>
+                    <dt>Data</dt>
+                    <dd>{record.dataShared}</dd>
+                  </div>
+                  <div>
+                    <dt>Akses terakhir</dt>
+                    <dd>{record.lastAccess}</dd>
+                  </div>
+                </dl>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-back">
+        <button type="button" className="primary-action" onClick={onHome}>
+          &larr; Kembali ke halaman utama
+        </button>
       </section>
     </>
   )
