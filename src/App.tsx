@@ -327,11 +327,87 @@ const notifications: NotificationItem[] = [
   },
 ]
 
-const jpnDocuments: { title: string; source: string }[] = [
-  { title: 'Borang Pengesahan Kelahiran hospital', source: 'KKM' },
-  { title: 'Kad Pranatal (Buku Rawatan Mengandung)', source: 'KKM' },
-  { title: 'Kad Pengenalan ibu & bapa', source: 'JPN / MyDigital ID' },
-  { title: 'Sijil Perkahwinan ibu bapa', source: 'JPN' },
+type JpnRequiredDocument = {
+  id: string
+  title: string
+  copies: string
+  mode: 'auto' | 'upload' | 'conditional'
+  autoDetail?: string
+  showWhen?: (applicant: string) => boolean
+}
+
+const jpnRequiredDocuments: JpnRequiredDocument[] = [
+  {
+    id: 'lm01',
+    title: 'Borang Daftar Kelahiran JPN.LM01',
+    copies: 'Asal',
+    mode: 'auto',
+    autoDetail: 'Diisi digital melalui borang ini',
+  },
+  {
+    id: 'hospital-confirmation',
+    title: 'Borang Pengesahan Kelahiran daripada hospital',
+    copies: 'Asal',
+    mode: 'auto',
+    autoDetail: 'Disahkan digital oleh KKM (Hospital Putrajaya)',
+  },
+  {
+    id: 'police-report',
+    title: 'Laporan Polis bagi kelahiran di rumah',
+    copies: 'Asal',
+    mode: 'conditional',
+  },
+  {
+    id: 'pranatal',
+    title: 'Kad Pranatal (Buku Rawatan Mengandung) atau Kad Rawatan Semasa Ibu Mengandung',
+    copies: 'Asal dan salinan',
+    mode: 'upload',
+  },
+  {
+    id: 'parent-id',
+    title: 'Kad pengenalan atau dokumen pengenalan diri ibu dan bapa',
+    copies: 'Asal dan salinan',
+    mode: 'auto',
+    autoDetail: 'Dipadu melalui MyDigital ID',
+  },
+  {
+    id: 'informant-id',
+    title: 'Kad Pengenalan atau dokumen pengenalan diri pemaklum',
+    copies: 'Asal dan salinan',
+    mode: 'conditional',
+    showWhen: (applicant) => applicant.includes('Pemaklum'),
+  },
+  {
+    id: 'death-cert',
+    title: 'Sijil Kematian ibu dan bapa kanak-kanak',
+    copies: 'Asal dan salinan (jika berkaitan)',
+    mode: 'conditional',
+  },
+  {
+    id: 'marriage-doc',
+    title: 'Dokumen Perkahwinan atau Perceraian ibu bapa kanak-kanak',
+    copies: 'Asal dan salinan',
+    mode: 'auto',
+    autoDetail: 'Disemak digital melalui rekod JPN',
+  },
+  {
+    id: 'am80',
+    title: 'Surat akuan AM80',
+    copies: 'Asal',
+    mode: 'conditional',
+  },
+  {
+    id: 'premature-cert',
+    title: 'Surat pengesahan pegawai perubatan bagi bayi kelahiran pra-matang',
+    copies: 'Asal (jika berkaitan)',
+    mode: 'conditional',
+  },
+  {
+    id: 'utility-bill',
+    title: 'Bil utiliti (air / elektrik / astro / telefon)',
+    copies: 'Asal dan salinan (jika berkaitan)',
+    mode: 'conditional',
+  },
 ]
 
 function App() {
@@ -340,6 +416,7 @@ function App() {
   const [isNameSubmitted, setIsNameSubmitted] = useState(false)
   const [applicant, setApplicant] = useState('Bapa')
   const [declared, setDeclared] = useState(false)
+  const [uploadedDocs, setUploadedDocs] = useState<Record<string, string>>({})
   const [selectedSaving, setSelectedSaving] = useState('SSPN Prime')
   const [consentGiven, setConsentGiven] = useState(false)
 
@@ -354,7 +431,30 @@ function App() {
   const fullChildName = trimmedChildName
     ? `${trimmedChildName} ${patronymic} ${fatherGivenName}`
     : ''
-  const canSubmit = Boolean(trimmedChildName) && declared
+
+  const visibleDocuments = jpnRequiredDocuments.filter(
+    (document) => !document.showWhen || document.showWhen(applicant),
+  )
+  const requiredUploads = visibleDocuments.filter((document) => document.mode === 'upload')
+  const completedUploads = requiredUploads.filter((document) => uploadedDocs[document.id])
+  const autoVerifiedCount = visibleDocuments.filter((document) => document.mode === 'auto').length
+  const uploadedCount = Object.keys(uploadedDocs).filter((id) =>
+    visibleDocuments.some((document) => document.id === id),
+  ).length
+  const documentProgress = autoVerifiedCount + uploadedCount
+
+  const handleDocUpload = (documentId: string, fileList: FileList | null) => {
+    const file = fileList?.[0]
+    if (!file) return
+
+    setUploadedDocs((current) => ({ ...current, [documentId]: file.name }))
+    setIsNameSubmitted(false)
+  }
+
+  const canSubmit =
+    Boolean(trimmedChildName) &&
+    declared &&
+    requiredUploads.every((document) => uploadedDocs[document.id])
 
   const openModul = () => {
     setView('modul')
@@ -640,26 +740,86 @@ function App() {
             <li>Ejaan disemak automatik oleh enjin peraturan penamaan JPN.</li>
           </ul>
 
-          <div className="doc-checklist" aria-label="Dokumen JPN.LM01 disahkan secara digital">
+          <div className="doc-checklist" aria-label="Dokumen yang perlu dikemukakan">
             <div className="doc-checklist-head">
-              <h3>Dokumen JPN.LM01</h3>
-              <span className="status-pill success">Disahkan secara digital</span>
+              <h3>Dokumen Yang Perlu Dikemukakan</h3>
+              <span className="status-pill action">
+                {documentProgress}/{visibleDocuments.length} lengkap
+              </span>
             </div>
             <p className="doc-checklist-note">
-              Dokumen wajib disahkan automatik rentas agensi &mdash; tiada salinan
-              fizikal perlu dimuat naik.
+              Senarai mengikut keperluan JPN.LM01. Dokumen yang boleh disahkan
+              secara digital dipaparkan automatik; dokumen lain boleh dimuat naik
+              terus di sini.
             </p>
             <ul>
-              {jpnDocuments.map((document) => (
-                <li key={document.title}>
-                  <span className="doc-check" aria-hidden="true">
-                    &#10003;
-                  </span>
-                  <span className="doc-title">{document.title}</span>
-                  <span className="doc-source">{document.source}</span>
-                </li>
-              ))}
+              {visibleDocuments.map((document) => {
+                const uploadedFile = uploadedDocs[document.id]
+                const modeLabel =
+                  document.mode === 'auto'
+                    ? 'Disahkan digital'
+                    : document.mode === 'upload'
+                      ? 'Wajib muat naik'
+                      : 'Jika berkaitan'
+
+                return (
+                  <li key={document.id}>
+                    <div className="doc-item-main">
+                      <div className="doc-item-top">
+                        <span className={`doc-mode-badge ${document.mode}`}>{modeLabel}</span>
+                        <span className="doc-copies">{document.copies}</span>
+                      </div>
+                      <span className="doc-title">{document.title}</span>
+                      {document.mode === 'auto' && document.autoDetail ? (
+                        <span className="doc-auto-detail">{document.autoDetail}</span>
+                      ) : null}
+                    </div>
+
+                    <div className="doc-item-action">
+                      {document.mode === 'auto' ? (
+                        <span className="doc-status-pill success" aria-label="Disahkan">
+                          &#10003;
+                        </span>
+                      ) : uploadedFile ? (
+                        <div className="doc-uploaded">
+                          <span className="doc-file-name" title={uploadedFile}>
+                            {uploadedFile}
+                          </span>
+                          <label className="doc-upload-change">
+                            Tukar
+                            <input
+                              type="file"
+                              accept=".pdf,.jpg,.jpeg,.png"
+                              onChange={(event) => handleDocUpload(document.id, event.target.files)}
+                            />
+                          </label>
+                        </div>
+                      ) : (
+                        <label className="doc-upload-btn">
+                          Muat naik
+                          <input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            onChange={(event) => handleDocUpload(document.id, event.target.files)}
+                          />
+                        </label>
+                      )}
+                    </div>
+                  </li>
+                )
+              })}
             </ul>
+            {requiredUploads.length > 0 && completedUploads.length < requiredUploads.length ? (
+              <p className="doc-upload-hint">
+                Muat naik dokumen wajib:{' '}
+                <strong>
+                  {requiredUploads
+                    .filter((document) => !uploadedDocs[document.id])
+                    .map((document) => document.title)
+                    .join(', ')}
+                </strong>
+              </p>
+            ) : null}
           </div>
 
           <label className="declaration">
@@ -711,7 +871,8 @@ function App() {
               </div>
             ) : (
               <p className="submission-status">
-                Lengkapkan nama anak dan tandakan pengakuan sebelum menghantar.
+                Lengkapkan nama anak, muat naik dokumen wajib, dan tandakan pengakuan
+                sebelum menghantar.
               </p>
             )}
           </div>
