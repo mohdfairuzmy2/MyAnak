@@ -494,7 +494,7 @@ function App() {
             <span>MyAnak</span>
           </a>
           <div className="nav-actions">
-            <a href="#tujuan">Tujuan</a>
+            <a href="#tujuan">Utama</a>
             <button type="button" className="link-button" onClick={openModul}>
               Modul
             </button>
@@ -583,29 +583,6 @@ function App() {
         </div>
       </section>
 
-      <section className="benefit-section" id="manfaat">
-        <div className="section-heading centered">
-          <p className="eyebrow">Manfaat</p>
-          <h2>Impak kepada rakyat dan kerajaan</h2>
-          <p>
-            MyAnak memberi nilai dua hala &mdash; memudahkan urusan ibu bapa dan
-            meningkatkan kecekapan penyampaian perkhidmatan kerajaan.
-          </p>
-        </div>
-
-        <div className="benefit-cards">
-          {manfaat.map((item) => (
-            <article className="manfaat-card" key={item.audience}>
-              <div className="manfaat-head">
-                <span className="manfaat-audience">{item.audience}</span>
-                <strong>{item.tagline}</strong>
-              </div>
-              <p>{item.detail}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section className="modules-cta">
         <div>
           <p className="eyebrow">Modul-Modul</p>
@@ -624,7 +601,7 @@ function App() {
       <section className="section-grid" id="pendaftaran">
         <div className="panel registration-panel">
           <div className="section-heading">
-            <p className="eyebrow">Modul 02 &middot; Tindakan Ibu Bapa</p>
+            <p className="eyebrow">Tindakan Ibu Bapa</p>
             <h2>Pendaftaran nama anak</h2>
             <p>
               Rekod kelahiran daripada hospital dan maklumat ibu bapa telah diisi
@@ -880,7 +857,7 @@ function App() {
 
         <div className="panel benefit-panel">
           <div className="section-heading">
-            <p className="eyebrow">Modul 04 &middot; Bantuan Proaktif</p>
+            <p className="eyebrow">Bantuan Proaktif</p>
             <h2>Kelayakan insentif kelahiran</h2>
           </div>
           <div className="benefit-amount">
@@ -926,7 +903,7 @@ function App() {
 
       <section className="insight-section" id="dokumen">
         <div className="section-heading centered">
-          <p className="eyebrow">Modul 02 & 03 &middot; Dokumen Digital</p>
+          <p className="eyebrow">Dokumen Digital</p>
           <h2>Dokumen dan timeline permohonan</h2>
           <p>
             Ibu bapa boleh melihat dokumen yang telah dijana, status semakan, dan
@@ -984,7 +961,7 @@ function App() {
       <section className="section-grid" id="integrasi">
         <div className="panel savings-panel">
           <div className="section-heading">
-            <p className="eyebrow">Modul 05 &middot; Simpanan Masa Depan</p>
+            <p className="eyebrow">Simpanan Masa Depan</p>
             <h2>Pilih akaun untuk anak</h2>
           </div>
 
@@ -1022,7 +999,7 @@ function App() {
 
         <div className="panel notification-panel">
           <div className="section-heading">
-            <p className="eyebrow">Modul 07 &middot; Pusat Notifikasi</p>
+            <p className="eyebrow">Pusat Notifikasi</p>
             <h2>Peringatan proaktif</h2>
           </div>
 
@@ -1043,7 +1020,7 @@ function App() {
 
       <section className="immunisation-section" id="imunisasi">
         <div className="section-heading">
-          <p className="eyebrow">Modul 06 &middot; Kesihatan Anak</p>
+          <p className="eyebrow">Kesihatan Anak</p>
           <h2>Jadual imunisasi digital</h2>
           <p>
             Tarikh vaksin dijana daripada tarikh lahir dan boleh ditempah di klinik
@@ -1109,17 +1086,39 @@ function ModulPage({ onHome }: { onHome: () => void }) {
         </nav>
 
         <div className="modul-hero-copy">
-          <p className="eyebrow">Modul-Modul</p>
-          <h1>Tujuh modul, satu pengalaman bersepadu</h1>
+          <p className="eyebrow">Manfaat</p>
+          <h1>Impak kepada rakyat dan kerajaan</h1>
           <p className="hero-description">
+            MyAnak memberi nilai dua hala &mdash; memudahkan urusan ibu bapa dan
+            meningkatkan kecekapan penyampaian perkhidmatan kerajaan.
+          </p>
+        </div>
+      </section>
+
+      <section className="benefit-section" id="manfaat">
+        <div className="benefit-cards">
+          {manfaat.map((item) => (
+            <article className="manfaat-card" key={item.audience}>
+              <div className="manfaat-head">
+                <span className="manfaat-audience">{item.audience}</span>
+                <strong>{item.tagline}</strong>
+              </div>
+              <p>{item.detail}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="modules-section" id="modul">
+        <div className="section-heading centered">
+          <p className="eyebrow">Modul-Modul</p>
+          <h2>Modul-modul Sistem</h2>
+          <p>
             Setiap modul menggunakan prinsip once-only: data yang sudah disahkan
             tidak diminta semula daripada ibu bapa. MyAnak menyelaras kesemuanya
             melalui satu portal.
           </p>
         </div>
-      </section>
-
-      <section className="modules-section" id="modul">
         <div className="modules-grid">
           {modules.map((module) => (
             <article className="module-card" key={module.code}>
