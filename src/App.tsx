@@ -415,6 +415,9 @@ function App() {
   const [childName, setChildName] = useState('Aisyah Damia')
   const [isNameSubmitted, setIsNameSubmitted] = useState(false)
   const [applicant, setApplicant] = useState('Bapa')
+  const [nameRelation, setNameRelation] = useState<
+    'binti' | 'bin' | 'Anak Lelaki' | 'Anak Perempuan' | 'Tidak Perlu'
+  >('binti')
   const [declared, setDeclared] = useState(false)
   const [uploadedDocs, setUploadedDocs] = useState<Record<string, string>>({})
   const [selectedSaving, setSelectedSaving] = useState('SSPN Prime')
@@ -426,10 +429,11 @@ function App() {
 
   const fatherFullName = 'Ahmad Hakimi bin Roslan'
   const childGender = 'Perempuan'
-  const patronymic = childGender === 'Perempuan' ? 'binti' : 'bin'
   const fatherGivenName = fatherFullName.split(/\s+bin\s+/i)[0]
   const fullChildName = trimmedChildName
-    ? `${trimmedChildName} ${patronymic} ${fatherGivenName}`
+    ? nameRelation === 'Tidak Perlu'
+      ? trimmedChildName
+      : `${trimmedChildName} ${nameRelation} ${fatherGivenName}`
     : ''
 
   const visibleDocuments = jpnRequiredDocuments.filter(
@@ -703,12 +707,29 @@ function App() {
                 <option value="Pemaklum (saksi kelahiran)">Pemaklum (saksi kelahiran)</option>
               </select>
             </label>
-            <div className="field compact static-field">
-              <span>Bin / Binti (auto)</span>
-              <strong>
-                {patronymic} {fatherGivenName}
-              </strong>
-            </div>
+            <label className="field compact">
+              <span>Bin / Binti / Anak Lelaki / Anak Perempuan / Tidak Perlu</span>
+              <select
+                value={nameRelation}
+                onChange={(event) => {
+                  setNameRelation(
+                    event.target.value as
+                      | 'binti'
+                      | 'bin'
+                      | 'Anak Lelaki'
+                      | 'Anak Perempuan'
+                      | 'Tidak Perlu',
+                  )
+                  setIsNameSubmitted(false)
+                }}
+              >
+                <option value="binti">binti</option>
+                <option value="bin">bin</option>
+                <option value="Anak Lelaki">Anak Lelaki</option>
+                <option value="Anak Perempuan">Anak Perempuan</option>
+                <option value="Tidak Perlu">Tidak Perlu</option>
+              </select>
+            </label>
           </div>
 
           <ul className="rule-hints">
